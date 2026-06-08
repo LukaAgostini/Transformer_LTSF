@@ -79,6 +79,14 @@ class Dataset_ETT_hour(Dataset):
         self.data_y = data[border1:border2]
         self.data_stamp = data_stamp
 
+
+        # for shuffling exp
+        if self.set_type == 0 and self.shuffle_data: 
+            permutation = np.random.permutation(len(self.data_x))
+            self.data_x = self.data_x[permutation]
+            self.data_y = self.data_y[permutation]
+            self.data_stamp = self.data_stamp[permutation]
+
     def __getitem__(self, index):
         s_begin = index
         s_end = s_begin + self.seq_len

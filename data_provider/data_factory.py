@@ -41,7 +41,9 @@ def data_provider(args, flag):
         target=args.target,
         timeenc=timeenc,
         freq=freq,
-        train_only=train_only
+        train_only=train_only,
+        # for the shuffling experiment
+        shuffle_data=getattr(args, 'shuffle_data', False)
     )
     print(flag, len(data_set))
     data_loader = DataLoader(

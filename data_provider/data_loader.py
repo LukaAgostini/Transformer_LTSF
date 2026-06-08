@@ -14,7 +14,8 @@ warnings.filterwarnings('ignore')
 class Dataset_ETT_hour(Dataset):
     def __init__(self, root_path, flag='train', size=None,
                  features='S', data_path='ETTh1.csv',
-                 target='OT', scale=True, timeenc=0, freq='h', train_only=False):
+                 target='OT', scale=True, timeenc=0, freq='h', train_only=False,
+                 shuffle_data=False):
         # size [seq_len, label_len, pred_len]
         # info
         if size == None:
@@ -38,6 +39,10 @@ class Dataset_ETT_hour(Dataset):
 
         self.root_path = root_path
         self.data_path = data_path
+
+        # for the shuffling exp
+        self.shuffle_data = shuffle_data
+
         self.__read_data__()
 
     def __read_data__(self):
@@ -82,6 +87,7 @@ class Dataset_ETT_hour(Dataset):
 
         # for shuffling exp
         if self.set_type == 0 and self.shuffle_data: 
+            print(">>> WARNING: shuffling training data - temporal order destroyed <<<")
             permutation = np.random.permutation(len(self.data_x))
             self.data_x = self.data_x[permutation]
             self.data_y = self.data_y[permutation]
@@ -110,7 +116,8 @@ class Dataset_ETT_hour(Dataset):
 class Dataset_ETT_minute(Dataset):
     def __init__(self, root_path, flag='train', size=None,
                  features='S', data_path='ETTm1.csv',
-                 target='OT', scale=True, timeenc=0, freq='t', train_only=False):
+                 target='OT', scale=True, timeenc=0, freq='t', train_only=False,
+                 shuffle_data=False):
         # size [seq_len, label_len, pred_len]
         # info
         if size == None:
@@ -134,6 +141,10 @@ class Dataset_ETT_minute(Dataset):
 
         self.root_path = root_path
         self.data_path = data_path
+
+        # for the shuffling exp
+        self.shuffle_data = shuffle_data
+
         self.__read_data__()
 
     def __read_data__(self):
@@ -177,6 +188,15 @@ class Dataset_ETT_minute(Dataset):
         self.data_y = data[border1:border2]
         self.data_stamp = data_stamp
 
+
+        # for shuffling exp
+        if self.set_type == 0 and self.shuffle_data: 
+            print(">>> WARNING: shuffling training data - temporal order destroyed <<<")
+            permutation = np.random.permutation(len(self.data_x))
+            self.data_x = self.data_x[permutation]
+            self.data_y = self.data_y[permutation]
+            self.data_stamp = self.data_stamp[permutation]
+
     def __getitem__(self, index):
         s_begin = index
         s_end = s_begin + self.seq_len
@@ -200,7 +220,8 @@ class Dataset_ETT_minute(Dataset):
 class Dataset_Custom(Dataset):
     def __init__(self, root_path, flag='train', size=None,
                  features='S', data_path='ETTh1.csv',
-                 target='OT', scale=True, timeenc=0, freq='h', train_only=False):
+                 target='OT', scale=True, timeenc=0, freq='h', train_only=False,
+                 shuffle_data= False):
         # size [seq_len, label_len, pred_len]
         # info
         if size == None:
@@ -225,6 +246,10 @@ class Dataset_Custom(Dataset):
 
         self.root_path = root_path
         self.data_path = data_path
+
+        # for the shuffling exp
+        self.shuffle_data = shuffle_data
+
         self.__read_data__()
 
     def __read_data__(self):
@@ -280,6 +305,15 @@ class Dataset_Custom(Dataset):
         self.data_x = data[border1:border2]
         self.data_y = data[border1:border2]
         self.data_stamp = data_stamp
+
+        # for shuffling exp
+        if self.set_type == 0 and self.shuffle_data: 
+            print(">>> WARNING: shuffling training data - temporal order destroyed <<<")
+            permutation = np.random.permutation(len(self.data_x))
+            self.data_x = self.data_x[permutation]
+            self.data_y = self.data_y[permutation]
+            self.data_stamp = self.data_stamp[permutation]
+
 
     def __getitem__(self, index):
         s_begin = index

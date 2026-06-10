@@ -182,7 +182,7 @@ for pred_len in 24 36 48 60
 do
   python -u run_longExp.py \
     --is_training 1 \
-    --root_path ./dataset/ \
+    --root_path /kaggle/input/datasets/lukaagostini/ltsf-benchmark-datasets/ \
     --data_path national_illness.csv \
     --model_id ili_36_$pred_len \
     --model $model_name \
